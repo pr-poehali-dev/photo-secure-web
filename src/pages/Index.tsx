@@ -5,9 +5,16 @@ import Dashboard from '@/components/Dashboard';
 import ClientsPage from '@/components/ClientsPage';
 import PhotobookPage from '@/components/PhotobookPage';
 import AuthPage from '@/components/AuthPage';
+import FeaturesPage from '@/components/FeaturesPage';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Index = () => {
-  const [currentPage, setCurrentPage] = useState('auth');
+  const [currentPage, setCurrentPage] = useState<'auth' | 'dashboard' | 'clients' | 'photobook' | 'features'>('auth');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState<'user' | 'admin'>('user');
 
@@ -39,30 +46,36 @@ const Index = () => {
             </div>
             
             <div className="flex items-center space-x-2">
-              <Button
-                variant={currentPage === 'dashboard' ? 'default' : 'ghost'}
-                onClick={() => setCurrentPage('dashboard')}
-                className="rounded-full"
-              >
-                <Icon name="Home" size={18} className="mr-2" />
-                Главная
-              </Button>
-              <Button
-                variant={currentPage === 'clients' ? 'default' : 'ghost'}
-                onClick={() => setCurrentPage('clients')}
-                className="rounded-full"
-              >
-                <Icon name="Users" size={18} className="mr-2" />
-                Клиенты
-              </Button>
-              <Button
-                variant={currentPage === 'photobook' ? 'default' : 'ghost'}
-                onClick={() => setCurrentPage('photobook')}
-                className="rounded-full"
-              >
-                <Icon name="Book" size={18} className="mr-2" />
-                Фотокниги
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant={currentPage === 'dashboard' ? 'default' : 'ghost'}
+                    className="rounded-full"
+                  >
+                    <Icon name="Home" size={18} className="mr-2" />
+                    Главная
+                    <Icon name="ChevronDown" size={16} className="ml-2" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56">
+                  <DropdownMenuItem onClick={() => setCurrentPage('dashboard')}>
+                    <Icon name="LayoutDashboard" size={18} className="mr-2" />
+                    Дашборд
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setCurrentPage('clients')}>
+                    <Icon name="Users" size={18} className="mr-2" />
+                    Клиенты
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setCurrentPage('photobook')}>
+                    <Icon name="Book" size={18} className="mr-2" />
+                    Фотокниги
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setCurrentPage('features')}>
+                    <Icon name="Sparkles" size={18} className="mr-2" />
+                    Возможности сервиса
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               {userRole === 'admin' && (
                 <Button
                   variant="outline"
@@ -88,6 +101,7 @@ const Index = () => {
         {currentPage === 'dashboard' && <Dashboard userRole={userRole} />}
         {currentPage === 'clients' && <ClientsPage />}
         {currentPage === 'photobook' && <PhotobookPage />}
+        {currentPage === 'features' && <FeaturesPage />}
       </main>
     </div>
   );
